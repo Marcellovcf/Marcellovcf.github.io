@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agente NR - Consultas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    textarea, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .resposta {
+      margin-top: 2rem;
+      background: #f9f9f9;
+      padding: 1rem;
+      border-left: 4px solid #007bff;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Agente NR</h1>
+    <textarea id="pergunta" rows="4" placeholder="Digite sua pergunta sobre a NR..."></textarea>
+    <button onclick="enviarPergunta()">Perguntar</button>
+    <div id="resposta" class="resposta" style="display:none;"></div>
+  </div>
+
+  <script>
+    async function enviarPergunta() {
+      const pergunta = document.getElementById('pergunta').value;
+      const respostaDiv = document.getElementById('resposta');
+      respostaDiv.style.display = 'block';
+      respostaDiv.innerText = 'Consultando...';
+
+      try {
+        const response = await fetch('https://agente-nr.onrender.com/perguntar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texto: pergunta })
+        });
+
+        if (!response.ok) throw new Error("Erro na requisição");
+
+        const data = await response.json();
+        respostaDiv.innerText = data.resposta;
+      } catch (error) {
+        respostaDiv.innerText = 'Erro ao consultar o agente. Verifique a conexão ou tente novamente.';
+      }
+    }
+  </script>
+</body>
+</html>
