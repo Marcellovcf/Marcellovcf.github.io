@@ -140,45 +140,46 @@
       }
     }
 
-  function atualizarHistorico(container) {
-    container.innerHTML = listaHistorico.map(item => `
-      <div class="historico-item">
-        <div class="pergunta-historico">📌 ${item.pergunta}</div>
-        <div class="resposta-historico">${item.resposta}</div>
-        <div class="fontes-historico">${item.fontes ? `📚 <strong>Fontes:</strong> ${item.fontes}` : ""}</div>
-      </div>
-    `).join('');
-  }
-
-  document.getElementById("formUpload").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const nome = document.getElementById("nomeNorma").value;
-    const arquivo = document.getElementById("arquivoPDF").files[0];
-    const respostaUpload = document.getElementById("respostaUpload");
-
-    const formData = new FormData();
-    formData.append("nome_norma", nome);
-    formData.append("file", arquivo);
-
-    respostaUpload.innerHTML = "⏳ Enviando norma...";
-
-    try {
-      const response = await fetch("https://agente-nr.onrender.com/upload", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await response.json();
-      if (data.status) {
-        respostaUpload.innerHTML = `✅ ${data.status}<br>📄 Norma: ${data.norma}<br>📎 Arquivo: ${data.arquivo}`;
-      } else {
-        respostaUpload.innerHTML = "❌ Erro ao enviar norma.";
-      }
-    } catch (err) {
-      respostaUpload.innerHTML = "❌ Erro de conexão com o servidor.";
+    function atualizarHistorico(container) {
+      container.innerHTML = listaHistorico.map(item => `
+        <div class="historico-item">
+          <div class="pergunta-historico">📌 ${item.pergunta}</div>
+          <div class="resposta-historico">${item.resposta}</div>
+          <div class="fontes-historico">${item.fontes ? `📚 <strong>Fontes:</strong> ${item.fontes}` : ""}</div>
+        </div>
+      `).join('');
     }
-  });
+
+    document.getElementById("formUpload").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const nome = document.getElementById("nomeNorma").value;
+      const arquivo = document.getElementById("arquivoPDF").files[0];
+      const respostaUpload = document.getElementById("respostaUpload");
+
+      const formData = new FormData();
+      formData.append("nome_norma", nome);
+      formData.append("file", arquivo);
+
+      respostaUpload.innerHTML = "⏳ Enviando norma...";
+
+      try {
+        const response = await fetch("https://agente-nr.onrender.com/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+        if (data.status) {
+          respostaUpload.innerHTML = `✅ ${data.status}<br>📄 Norma: ${data.norma}<br>📎 Arquivo: ${data.arquivo}`;
+        } else {
+          respostaUpload.innerHTML = "❌ Erro ao enviar norma.";
+        }
+      } catch (err) {
+        respostaUpload.innerHTML = "❌ Erro de conexão com o servidor.";
+      }
+    });
   </script>
 </body>
 </html>
+
