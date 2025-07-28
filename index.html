@@ -80,6 +80,17 @@
     <h1>Agente NR</h1>
 
     <textarea id="pergunta" rows="4" placeholder="Digite sua pergunta sobre as NR's..."></textarea>
+
+    <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+      <h3>📤 Enviar nova norma (PDF)</h3>
+      <form id="formUpload">
+        <input type="text" id="nomeNorma" placeholder="Nome da norma (ex: NR-22 ou Norma Interna ABC)" required style="width: 100%; padding: 8px; margin-bottom: 8px;" />
+        <input type="file" id="arquivoPDF" accept="application/pdf" required style="margin-bottom: 8px;" />
+        <button type="submit">Enviar Norma</button>
+      </form>
+      <div id="respostaUpload" style="margin-top: 10px;"></div>
+    </div>
+
     <button onclick="consultar()">Perguntar</button>
 
     <div class="resposta" id="resposta"></div>
@@ -129,15 +140,45 @@
       }
     }
 
-    function atualizarHistorico(container) {
-      container.innerHTML = listaHistorico.map(item => `
-        <div class="historico-item">
-          <div class="pergunta-historico">📌 ${item.pergunta}</div>
-          <div class="resposta-historico">${item.resposta}</div>
-          <div class="fontes-historico">${item.fontes ? `📚 <strong>Fontes:</strong> ${item.fontes}` : ""}</div>
-        </div>
-      `).join('');
+  function atualizarHistorico(container) {
+    container.innerHTML = listaHistorico.map(item => `
+      <div class="historico-item">
+        <div class="pergunta-historico">📌 ${item.pergunta}</div>
+        <div class="resposta-historico">${item.resposta}</div>
+        <div class="fontes-historico">${item.fontes ? `📚 <strong>Fontes:</strong> ${item.fontes}` : ""}</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById("formUpload").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const nome = document.getElementById("nomeNorma").value;
+    const arquivo = document.getElementById("arquivoPDF").files[0];
+    const respostaUpload = document.getElementById("respostaUpload");
+
+    const formData = new FormData();
+    formData.append("nome_norma", nome);
+    formData.append("file", arquivo);
+
+    respostaUpload.innerHTML = "⏳ Enviando norma...";
+
+    try {
+      const response = await fetch("https://agente-nr.onrender.com/upload", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+      if (data.status) {
+        respostaUpload.innerHTML = `✅ ${data.status}<br>📄 Norma: ${data.norma}<br>📎 Arquivo: ${data.arquivo}`;
+      } else {
+        respostaUpload.innerHTML = "❌ Erro ao enviar norma.";
+      }
+    } catch (err) {
+      respostaUpload.innerHTML = "❌ Erro de conexão com o servidor.";
     }
+  });
   </script>
 </body>
 </html>
