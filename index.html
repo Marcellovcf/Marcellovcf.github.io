@@ -14,11 +14,25 @@
     }
     .container {
       background-color: rgba(255, 255, 255, 0.95);
-      max-width: 800px;
+      max-width: 1200px;
       margin: 40px auto;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .layout {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .upload-section {
+      flex: 1;
+    }
+    .main-section {
+      flex: 2;
+    }
+    .historico {
+      flex: 1;
     }
     h1 {
       text-align: center;
@@ -78,26 +92,28 @@
 <body>
   <div class="container">
     <h1>Agente NR</h1>
-
-    <textarea id="pergunta" rows="4" placeholder="Digite sua pergunta sobre as NR's..."></textarea>
-
-    <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
-      <h3>📤 Enviar nova norma (PDF)</h3>
-      <form id="formUpload">
-        <input type="text" id="nomeNorma" placeholder="Nome da norma (ex: NR-22 ou Norma Interna ABC)" required style="width: 100%; padding: 8px; margin-bottom: 8px;" />
-        <input type="file" id="arquivoPDF" accept="application/pdf" required style="margin-bottom: 8px;" />
-        <button type="submit">Enviar Norma</button>
-      </form>
-      <div id="respostaUpload" style="margin-top: 10px;"></div>
-    </div>
-
-    <button onclick="consultar()">Perguntar</button>
-
-    <div class="resposta" id="resposta"></div>
-    <div class="fontes" id="fontes"></div>
-    <div class="historico" id="historico">
-      <h3>Histórico</h3>
-      <div id="listaHistorico"></div>
+    <div class="layout">
+      <div class="upload-section">
+        <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+          <h3>📤 Enviar nova norma (PDF)</h3>
+          <form id="formUpload">
+            <input type="text" id="nomeNorma" placeholder="Nome da norma (ex: NR-22 ou Norma Interna ABC)" required style="width: 100%; padding: 8px; margin-bottom: 8px;" />
+            <input type="file" id="arquivoPDF" accept="application/pdf" required style="margin-bottom: 8px;" />
+            <button type="submit">Enviar Norma</button>
+          </form>
+          <div id="respostaUpload" style="margin-top: 10px;"></div>
+        </div>
+      </div>
+      <div class="main-section">
+        <textarea id="pergunta" rows="4" placeholder="Digite sua pergunta sobre as NR's..."></textarea>
+        <button onclick="consultar()">Perguntar</button>
+        <div class="resposta" id="resposta"></div>
+        <div class="fontes" id="fontes"></div>
+      </div>
+      <div class="historico" id="historico">
+        <h3>Histórico</h3>
+        <div id="listaHistorico"></div>
+      </div>
     </div>
   </div>
 
